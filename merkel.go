@@ -95,9 +95,14 @@ func buildWithNodes(ns []*Node) *Node {
 		}
 
 		parentNs = append(parentNs, parent)
-		if len(parentNs) == 2 {
-			return parent
-		}
+	}
+
+	if len(parentNs) == 1 {
+		return parentNs[0]
+	}
+
+	if len(parentNs)%2 == 1 {
+		parentNs = append(parentNs, nil)
 	}
 
 	return buildWithNodes(parentNs)
