@@ -59,13 +59,11 @@ func TestDiff(t *testing.T) {
 		&block{"Hello"},
 		&block{"world"},
 		&block{"uiui"},
-		&block{"muiui"},
 	}
 	items2 := []Raw{
-		&block{"buffalo"},
+		&block{"Hello"},
 		&block{"world"},
-		&block{"pewpew"},
-		&block{"muiui"},
+		&block{"uiui"},
 	}
 	left, right := New(items1), New(items2)
 	fmt.Println("left hash ", left.Root.HashString())
