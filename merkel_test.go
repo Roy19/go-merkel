@@ -53,3 +53,22 @@ func TestMerkel(t *testing.T) {
 	fmt.Println(tree.Root.HashString())
 	fmt.Println(tree.String())
 }
+
+func TestDiff(t *testing.T) {
+	items1 := []Raw{
+		&block{"Hello"},
+		&block{"world"},
+		&block{"uiui"},
+		&block{"muiui"},
+	}
+	items2 := []Raw{
+		&block{"buffalo"},
+		&block{"world"},
+		&block{"pewpew"},
+		&block{"muiui"},
+	}
+	left, right := New(items1), New(items2)
+	fmt.Println("left hash ", left.Root.HashString())
+	fmt.Println("right hash ", right.Root.HashString())
+	fmt.Println(FindDifference(left, right))
+}

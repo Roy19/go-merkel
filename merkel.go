@@ -1,6 +1,7 @@
 package merkel
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 )
@@ -106,4 +107,49 @@ func buildWithNodes(ns []*Node) *Node {
 	}
 
 	return buildWithNodes(parentNs)
+}
+
+func FindDifference(left, right *Tree) []Raw {
+	return findDifferenceHelper(left.Root, right.Root)
+}
+
+func findDifferenceHelper(left, right *Node) []Raw {
+	diff := make([]Raw, 0)
+	if left == nil && right == nil {
+		return diff
+	}
+	if left == nil {
+		return travarseTree(right)
+	}
+	if right == nil {
+		return travarseTree(left)
+	}
+	if bytes.Equal(left.Hash, right.Hash) {
+		return diff
+	}
+	if left.Raw != nil && right.Raw != nil {
+		diff = append(diff, right.Raw)
+		return diff
+	}
+	diff = append(diff, findDifferenceHelper(left.left, right.left)...)
+	diff = append(diff, findDifferenceHelper(left.right, right.right)...)
+	return diff
+}
+
+func travarseTree(root *Node) []Raw {
+	diff := make([]Raw, 0)
+	if root == nil {
+		return diff
+	}
+	if root.Raw != nil {
+		diff = append(diff, root.Raw)
+		return diff
+	}
+	if root.left != nil {
+		diff = append(diff, travarseTree(root.left)...)
+	}
+	if root.right != nil {
+		diff = append(diff, travarseTree(root.right)...)
+	}
+	return diff
 }
